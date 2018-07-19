@@ -1,39 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   files_from_dir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/23 18:29:07 by uboumedj          #+#    #+#             */
-/*   Updated: 2018/07/19 16:05:49 by uboumedj         ###   ########.fr       */
+/*   Created: 2018/07/19 15:49:08 by uboumedj          #+#    #+#             */
+/*   Updated: 2018/07/19 16:15:28 by uboumedj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS_H
+#include "../inc/ft_ls.h"
 
-# define FT_LS_H
-
-# include "../libft/inc/libft.h"
-# include <sys/types.h>
-# include <dirent.h>
-
-typedef struct	s_flags
+int		files_from_dir(char *directory, t_data *data)
 {
-	char		l;
-	char		up_r;
-	char		a;
-	char		r;
-	char		t;
-}				t_flags;
+	DIR				*dir;
+	struct dirent	*dp;
+	int				i;
 
-typedef struct	s_data
-{
-	t_flags		*flags;
-	char		*flaglist;
-}				t_data;
-
-void			error_option(t_data **data, char c);
-int				files_from_dir(char *directory, t_data *data);
-
-#endif
+	if ((dir = opendir(directory)) == NULL)
+		return (0);
+	while ((dp = readdir(dir)) != NULL)
+	{
+		i = 0;
+		if (dp->d_name[0] != '.' || data->flags->a)
+		{
+			while (dp->d_name[i])
+				ft_putchar(dp->d_name[i++]);
+			ft_putchar('\n');
+		}
+	}
+	closedir(dir);
+	return (1);
+}

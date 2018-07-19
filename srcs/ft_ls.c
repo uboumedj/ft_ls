@@ -6,7 +6,7 @@
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/23 18:32:20 by uboumedj          #+#    #+#             */
-/*   Updated: 2018/05/23 19:15:03 by uboumedj         ###   ########.fr       */
+/*   Updated: 2018/07/19 16:06:28 by uboumedj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,21 @@ static int	init_data(t_data **data)
 
 int			main(int argc, char **argv)
 {
-	t_data	*data;
+	t_data			*data;
+	int				i;
 
 	if (!(init_data(&data)))
 		return (0);
 	if (argc > 1)
 	{
-		if (argv[1][0] == '-')
-			check_flags(&data, argv[1]);
+		i = 1;
+		while (i < argc && argv[i][0] == '-')
+		{
+			check_flags(&data, argv[i]);
+			i++;
+		}
 	}
-	else
-	{
-		(void)argc;
-	}
+	files_from_dir(".", data);
 	free(data->flags);
 	free(data);
 	return (0);

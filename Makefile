@@ -6,7 +6,7 @@
 #    By: uboumedj <uboumedj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/22 16:31:48 by uboumedj          #+#    #+#              #
-#    Updated: 2018/05/23 19:08:08 by uboumedj         ###   ########.fr        #
+#    Updated: 2018/07/19 15:58:09 by uboumedj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ FLAGS = -Wall -Wextra -Werror
 
 LIBFT = libft
 
-SRCS = srcs/ft_ls.c srcs/errors.c 
+SRCS = srcs/ft_ls.c srcs/errors.c srcs/files_from_dir.c 
 
 INC = ft_ls.h
 
