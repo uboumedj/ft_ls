@@ -6,7 +6,7 @@
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/23 18:32:20 by uboumedj          #+#    #+#             */
-/*   Updated: 2018/07/19 16:06:28 by uboumedj         ###   ########.fr       */
+/*   Updated: 2018/10/05 17:03:53 by uboumedj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ int			main(int argc, char **argv)
 			i++;
 		}
 	}
-	files_from_dir(".", data);
+	files_from_dir(".", &data);
+	print_files(data);
 	free(data->flags);
 	free(data);
 	return (0);
