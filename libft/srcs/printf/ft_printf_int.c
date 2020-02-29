@@ -39,7 +39,7 @@ size_t			do_lnb(va_list *vlist, int mod, t_printf *handler)
 {
 	long int		res;
 
-	mod = 0;
+	(void)mod;
 	res = va_arg(*vlist, long int);
 	if (handler->spec == 'D')
 		return (print_nb((long long int)res, handler));

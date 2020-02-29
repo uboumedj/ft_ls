@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   filetype.c                                         :+:      :+:    :+:   */
+/*   reorder.c                                         :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,45 +12,37 @@
 
 #include "../inc/ft_ls.h"
 
-t_files		*new_file(char *data)
+void        reorder_files(t_data **data)
 {
-	t_files		*new;
-
-	if (!(new = (t_files *)malloc(sizeof(t_files))))
-		return (NULL);
-	new->str = data;
-	new->next = NULL;
-	return (new);
+    if ((*data)->flags->t)
+        order_alphabetically(data);
+    else
+        order_alphabetically(data);
 }
 
-static void	swap_next(t_files **a)
+void		order_alphabetically(t_data **data)
 {
-	char		*temp;
+	int			ordered;
+	int			descending;
+	t_file		*file;
 
-	temp = (*a)->str;
-	(*a)->str = (*a)->next->str;
-	(*a)->next->str = temp;
-}
-
-void		orderfiles(t_files **names, char order)
-{
-	int			check;
-	t_files		*inc;
-
-	check = 1;
-	while (check == 1)
+	ordered = 1;
+	descending = (*data)->flags->r;
+	while (ordered == 1)
 	{
-		check = 0;
-		inc = *names;
-		while (inc->next != NULL)
+		ordered = 0;
+		file = (*data)->file_list;
+		while (file->next)
 		{
-			if ((ft_strcmp(inc->str, inc->next->str) > 0 && !order)
-				|| (ft_strcmp(inc->str, inc->next->str) < 0 && order))
+			if ((ft_strcmp(file->name, file->next->name) > 0 && !descending)
+				|| (ft_strcmp(file->name, file->next->name) < 0 && descending))
 			{
-				swap_next(&inc);
-				check = 1;
+				swap_with_next(file);
+				ordered = 1;
 			}
-			inc = inc->next;
+			else
+				file = file->next;
 		}
+		rewind_file_list(data);
 	}
 }

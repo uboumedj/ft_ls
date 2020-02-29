@@ -18,6 +18,9 @@
 # include <sys/types.h>
 # include <dirent.h>
 
+# define SUCCESS 1
+# define FAILURE 0
+
 typedef struct		s_flags
 {
 	char			l;
@@ -27,23 +30,50 @@ typedef struct		s_flags
 	char			t;
 }					t_flags;
 
-typedef struct		s_files
+typedef struct		s_file
 {
-	char			*str;
-	struct s_files	*next;
-}					t_files;
+	char			*name;
+	unsigned char	type;
+	unsigned short	length;
+	struct s_file	*prev;
+	struct s_file	*next;
+}					t_file;
 
 typedef struct		s_data
 {
 	t_flags			*flags;
-	char			*flaglist;
-	t_files			*names;
+	char			*valid_flags;
+	t_file			*file_list;
 }					t_data;
 
+/*
+** Data structure initialisation
+*/
+
+int					initialise_data(t_data **data);
+int     			initialise_flags(t_data **data);
+
+/*
+** Arguments parsing
+*/
+
+void				parse_flags(t_data **data, int argc, char **argv);
+void				read_argument(t_data **data, char *arg);
+int     			is_valid_flag(char *valid_flags, char c);
+
+/*
+** Directory stream manipulation
+*/
+
+void				save_entry_data(t_data **data, struct dirent *dir_entry);
+void				read_directory_loop(t_data **data, DIR *dir_stream);
 void				error_option(t_data **data, char c);
-int					files_from_dir(char *directory, t_data **data);
-t_files				*new_file(char *data);
+void				swap_with_next(t_file *file);
+void				rewind_file_list(t_data **data);
+void				reorder_files(t_data **data);
+void				order_alphabetically(t_data **data);
+int					get_files_data(char *directory, t_data **data);
+t_file				*new_file(void);
 void				print_files(t_data *data);
-void				orderfiles(t_files **names, char order);
 
 #endif

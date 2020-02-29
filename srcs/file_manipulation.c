@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memccpy.c                                       :+:      :+:    :+:   */
+/*   file_manipulation.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/10 13:47:04 by uboumedj          #+#    #+#             */
-/*   Updated: 2018/01/10 14:59:16 by uboumedj         ###   ########.fr       */
+/*   Created: 2018/10/05 16:31:12 by uboumedj          #+#    #+#             */
+/*   Updated: 2018/10/05 17:03:12 by uboumedj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
+#include "../inc/ft_ls.h"
 
-void	*ft_memccpy(void *dest, const void *src, int c, size_t len)
+t_file		*new_file(void)
 {
-	size_t	i;
+	t_file		*new;
 
-	i = 0;
-	while (i < len)
-	{
-		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
-		if (((unsigned char *)src)[i] == (unsigned char)c)
-		{
-			return ((void *)(dest + i + 1));
-		}
-		i++;
-	}
-	return (NULL);
+	if (!(new = (t_file *)malloc(sizeof(t_file))))
+		return (NULL);
+	new->prev = NULL;
+	new->next = NULL;
+	return (new);
 }

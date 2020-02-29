@@ -16,7 +16,7 @@ size_t			do_ptr(va_list *vlist, int mod, t_printf *handler)
 {
 	void	*ptr;
 
-	mod = 0;
+	(void)mod;
 	ptr = va_arg(*vlist, void *);
 	return (print_ptr((size_t)ptr, handler));
 }

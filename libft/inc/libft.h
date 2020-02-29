@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <string.h>
+# include <stdint.h>
 # include <stdlib.h>
 # include <wchar.h>
 # include "ft_printf.h"

@@ -18,7 +18,7 @@ FLAGS = -Wall -Wextra -Werror
 
 LIBFT = libft
 
-SRCS = srcs/ft_ls.c srcs/errors.c srcs/files_from_dir.c srcs/filetype.c 
+SRCS = srcs/ft_ls.c srcs/errors.c srcs/file_parsing.c srcs/file_manipulation.c  srcs/data_initialisation.c srcs/reorder.c srcs/reorder_help_funcs.c
 
 INC = ft_ls.h
 
@@ -30,7 +30,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -C $(LIBFT)
-	@ $(CC) $(FLAGS) -o $(NAME) -Iinclude $(LIBFT)/libft.a $(SRCS)
+	@ $(CC) $(FLAGS) -o $(NAME) $(SRCS) -Iinclude $(LIBFT)/libft.a
 	@echo "\033[1;34mft_ls\033[1;32m...compiled\t✓\033[0m"
 
 clean:
