@@ -14,35 +14,61 @@
 
 void        reorder_files(t_data **data)
 {
+	int		descending;
+	t_file	**file_list;
+
+	descending = (*data)->flags->r;
+	file_list = &((*data)->file_list);
     if ((*data)->flags->t)
-        order_alphabetically(data);
+        order_alphabetically(file_list, descending);
     else
-        order_alphabetically(data);
+        order_alphabetically(file_list, descending);
 }
 
-void		order_alphabetically(t_data **data)
+void		order_alphabetically(t_file **file_list, int descending)
 {
 	int			ordered;
-	int			descending;
+	int			compare;
 	t_file		*file;
 
 	ordered = 1;
-	descending = (*data)->flags->r;
 	while (ordered == 1)
 	{
 		ordered = 0;
-		file = (*data)->file_list;
-		while (file->next)
+		file = *file_list;
+		if (file)
 		{
-			if ((ft_strcmp(file->name, file->next->name) > 0 && !descending)
-				|| (ft_strcmp(file->name, file->next->name) < 0 && descending))
+			while (file->next)
 			{
-				swap_with_next(file);
-				ordered = 1;
+				compare = compare_file_names(file, file->next);
+				if ((compare > 0 && !descending) || (compare < 0 && descending))
+				{
+					swap_with_next(file);
+					ordered = 1;
+				}
+				else
+					file = file->next;
 			}
-			else
-				file = file->next;
+			rewind_file_list(file_list);
 		}
-		rewind_file_list(data);
+	}
+	order_children(file_list, descending);
+}
+
+void		order_children(t_file **file_list, int descending)
+{
+	t_file *file;
+
+	if (*file_list)
+	{
+		file = *file_list;
+		while (file)
+		{
+			if (file->child)
+			{
+				order_alphabetically(&(file->child), descending);
+			}
+			file = file->next;
+		}
 	}
 }

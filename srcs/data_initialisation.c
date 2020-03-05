@@ -23,6 +23,7 @@ int     initialise_data(t_data **data)
     }
 	(*data)->valid_flags = "lRart";
 	(*data)->file_list = NULL;
+	(*data)->file_request = NULL;
     if (!(initialise_flags(data)))
     {
         error_check = FAILURE;
@@ -42,56 +43,17 @@ int     initialise_flags(t_data **data)
     return (SUCCESS);
 }
 
-void	parse_flags(t_data **data, int argc, char **argv)
-{
-	int		i;
-	if (argc > 1)
-	{
-		i = 1;
-		while (i < argc && argv[i][0] == '-')
-		{
-			read_argument(data, argv[i]);
-			i++;
-		}
-	}
-}
-
-void	read_argument(t_data **data, char *arg)
+int		initialise_file_requests(t_data **data, int length)
 {
 	int i;
 
-	i = 1;
-	while (arg[i])
-	{
-		if (!(is_valid_flag((*data)->valid_flags, arg[i])))
-			error_option(data, arg[i]);
-		else
-		{
-			if (arg[i] == 'R')
-				(*data)->flags->up_r = 1;
-			else if (arg[i] == 'a')
-				(*data)->flags->a = 1;
-			else if (arg[i] == 'l')
-				(*data)->flags->l = 1;
-			else if (arg[i] == 'r')
-				(*data)->flags->r = 1;
-			else if (arg[i] == 't')
-				(*data)->flags->t = 1;
-		}
-		i++;
-	}
-}
-
-int     is_valid_flag(char *valid_flags, char c)
-{
-	int i;
-
+	if (!((*data)->file_request = (char **)malloc(sizeof(char *) * length)))
+		return (FAILURE);
 	i = 0;
-	while (valid_flags[i])
+	while (i < length)
 	{
-		if (valid_flags[i] == c)
-			return (SUCCESS);
+		(*data)->file_request[i] = NULL;
 		i++;
 	}
-	return (FAILURE);
+	return (SUCCESS);
 }

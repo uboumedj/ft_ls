@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_manipulation.c                                :+:      :+:    :+:   */
+/*   free_memory.c           		                     :+:      :+:    :+:  */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,29 +12,41 @@
 
 #include "../inc/ft_ls.h"
 
-t_file		*new_file(void)
+void		free_memory(t_data *data)
 {
-	t_file		*new;
-
-	if (!(new = (t_file *)malloc(sizeof(t_file))))
-		return (NULL);
-	new->prev = NULL;
-	new->child = NULL;
-	new->next = NULL;
-	return (new);
+	free_file_list(data->file_list);
+	if (data->file_request)
+		free_file_requests(data->file_request);
+	free(data->flags);
+	free(data);
 }
 
-int			compare_file_names(t_file *file_1, t_file *file_2)
+void		free_file_list(t_file *file)
+{
+	t_file *next;
+
+	while (file)
+	{
+		next = file->next;
+		free_file_list(file->child);
+		free(file->name);
+		free(file);
+		file = next;
+	}
+}
+
+void		free_file_requests(char **file_request)
 {
 	int i;
 
 	i = 0;
-	if (!file_1 || !file_2)
-		return (FAILURE);
-	while (file_1->name[i] &&
-			ft_tolower(file_1->name[i]) == ft_tolower(file_2->name[i]))
+	if (file_request)
 	{
-		i++;
+		while (file_request[i])
+		{
+			free(file_request[i]);
+			i++;
+		}
+		free(file_request);
 	}
-	return (ft_tolower(file_1->name[i]) - ft_tolower(file_2->name[i]));
 }

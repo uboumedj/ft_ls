@@ -31,13 +31,13 @@ void	swap_with_next(t_file *file)
 	}
 }
 
-void	rewind_file_list(t_data **data)
+void	rewind_file_list(t_file **file_list)
 {
-	if ((*data)->file_list)
+	if (*file_list)
 	{
-		while ((*data)->file_list->prev)
+		while ((*file_list)->prev)
 		{
-			(*data)->file_list = (*data)->file_list->prev;
+			(*file_list) = (*file_list)->prev;
 		}
 	}
 }

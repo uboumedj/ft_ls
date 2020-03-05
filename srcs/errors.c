@@ -14,10 +14,17 @@
 
 void	error_option(t_data **data, char c)
 {
+	free_file_requests((*data)->file_request);
 	free((*data)->flags);
 	free(*data);
-	ft_putstr_fd("./ft_ls: illegal option -- ", 2);
+	ft_putstr_fd("./ft_ls: invalid option -- ", 2);
 	ft_putchar_fd(c, 2);
 	ft_putstr_fd("\nusage: ./ft_ls [-Ralrt] [file ...]\n", 2);
-	exit(1);
+}
+
+void	error_unknown_file(char *name)
+{
+	ft_putstr_fd("./ft_ls: cannot access '", 2);
+	ft_putstr_fd(name, 2);
+	ft_putstr_fd("': No such file or directory\n", 2);
 }

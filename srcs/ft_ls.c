@@ -18,11 +18,18 @@ int			main(int argc, char **argv)
 
 	if (!(initialise_data(&data)))
 		return (0);
-	parse_flags(&data, argc, argv);
-	get_files_data(".", &data);
+	if (!(parse_arguments(&data, argc, argv)))
+		return (0);
+	if (data->file_request)
+	{
+		get_requested_files(&data);
+	}
+	else
+	{
+		get_files_data(".", &data);
+	}
 	reorder_files(&data);
 	print_files(data);
-	free(data->flags);
-	free(data);
+	free_memory(data);
 	return (0);
 }

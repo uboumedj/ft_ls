@@ -14,50 +14,76 @@
 
 int		get_files_data(char *directory, t_data **data)
 {
-	DIR			*dir_stream;
-
-	if ((dir_stream = opendir(directory)) == NULL)
-		return (FAILURE);
-	read_directory_loop(data, dir_stream);
-	closedir(dir_stream);
-	return (SUCCESS);
-}
-
-void	read_directory_loop(t_data **data, DIR *dir_stream)
-{
+	DIR				*dir_stream;
 	struct dirent	*next_dir_entry;
+	int				result;
 
-	while ((next_dir_entry = readdir(dir_stream)) != NULL)
+	result = SUCCESS;
+	if ((dir_stream = opendir(directory)) == NULL)
+		result = FAILURE;
+	else
 	{
-		save_entry_data(data, next_dir_entry);
+		create_parent(data, directory);
+		while ((next_dir_entry = readdir(dir_stream)) != NULL)
+			save_entry_data(data, &((*data)->file_list), next_dir_entry);
+		closedir(dir_stream);
 	}
+	return (result);
 }
 
-void	save_entry_data(t_data **data, struct dirent *dir_entry)
+void	create_parent(t_data **data, char *directory)
 {
-	t_file	*current_entry;
+	t_file	*new;
 
-	current_entry = new_file();
-	current_entry->name = dir_entry->d_name;
-	current_entry->type = dir_entry->d_type;
-	current_entry->length = dir_entry->d_reclen;
-	current_entry->next = (*data)->file_list;
-	if ((*data)->file_list != NULL)
-	{
-		(*data)->file_list->prev = current_entry;
-	}
-	(*data)->file_list = current_entry;
+	rewind_file_list(&(*data)->file_list);
+	new = new_file();
+	new->name = ft_strdup(directory);
+	new->type = DT_DIR;
+	new->next = (*data)->file_list;
+	new->parent = NULL;
+	new->child = NULL;
+	new->prev = NULL;
+	if ((*data)->file_list)
+		(*data)->file_list->prev = new;
+	(*data)->file_list = new;
 }
 
-void	print_files(t_data *data)
+void	save_entry_data(t_data **data, t_file **file_list,
+												struct dirent *dir_entry)
 {
-	t_file			*file;
+	t_file	*file;
 
-	file = data->file_list;
-	while (file != NULL)
+	file = new_file();
+	file->name = ft_strdup(dir_entry->d_name);
+	file->type = dir_entry->d_type;
+	file->length = dir_entry->d_reclen;
+	file->child = NULL;
+	file->parent = *file_list;
+	if (need_children_data(data, file))
+		get_children_data(data, &file);
+	file->next = (*file_list)->child;
+	if ((*file_list)->child != NULL)
+		(*file_list)->child->prev = file;
+	(*file_list)->child = file;
+}
+
+int		get_children_data(t_data **data, t_file **file)
+{
+	DIR				*dir_stream;
+	struct dirent	*next_dir_entry;
+	char			*directory;
+	int				result;
+
+	directory = get_file_path(*file);
+	result = SUCCESS;
+	if ((dir_stream = opendir(directory)) == NULL)
+		result = FAILURE;
+	else
 	{
-		if (data->flags->a || (file->name)[0] != '.')
-			ft_printf("%s\n", file->name);
-		file = file->next;
+		while ((next_dir_entry = readdir(dir_stream)) != NULL)
+			save_entry_data(data, file, next_dir_entry);
+		closedir(dir_stream);
 	}
+	free(directory);
+	return (result);
 }

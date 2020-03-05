@@ -14,11 +14,14 @@ NAME = ft_ls
 
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 LIBFT = libft
 
-SRCS = srcs/ft_ls.c srcs/errors.c srcs/file_parsing.c srcs/file_manipulation.c  srcs/data_initialisation.c srcs/reorder.c srcs/reorder_help_funcs.c
+SRCS = srcs/ft_ls.c srcs/errors.c srcs/file_parsing.c srcs/file_manipulation.c \
+		srcs/data_initialisation.c srcs/reorder.c srcs/reorder_help_funcs.c \
+		srcs/free_memory.c srcs/display.c srcs/parse_args.c srcs/file_requests_parsing.c \
+		srcs/parsing_help_funcs.c
 
 INC = ft_ls.h
 

@@ -35,6 +35,8 @@ typedef struct		s_file
 	char			*name;
 	unsigned char	type;
 	unsigned short	length;
+	struct s_file	*parent;
+	struct s_file	*child;
 	struct s_file	*prev;
 	struct s_file	*next;
 }					t_file;
@@ -42,6 +44,7 @@ typedef struct		s_file
 typedef struct		s_data
 {
 	t_flags			*flags;
+	char			**file_request;
 	char			*valid_flags;
 	t_file			*file_list;
 }					t_data;
@@ -52,28 +55,69 @@ typedef struct		s_data
 
 int					initialise_data(t_data **data);
 int     			initialise_flags(t_data **data);
+int					initialise_file_requests(t_data **data, int length);
 
 /*
 ** Arguments parsing
 */
 
-void				parse_flags(t_data **data, int argc, char **argv);
-void				read_argument(t_data **data, char *arg);
+int					parse_arguments(t_data **data, int argc, char **argv);
+int					save_file_request(t_data **data, int argc, char *arg);
+int					read_argument(t_data **data, char *arg);
+int					parse_option(t_data **data, char *arg);
 int     			is_valid_flag(char *valid_flags, char c);
+void				error_option(t_data **data, char c);
+void				error_unknown_file(char *name);
 
 /*
-** Directory stream manipulation
+** Current directory parsing (no file request)
 */
 
-void				save_entry_data(t_data **data, struct dirent *dir_entry);
-void				read_directory_loop(t_data **data, DIR *dir_stream);
-void				error_option(t_data **data, char c);
-void				swap_with_next(t_file *file);
-void				rewind_file_list(t_data **data);
-void				reorder_files(t_data **data);
-void				order_alphabetically(t_data **data);
-int					get_files_data(char *directory, t_data **data);
 t_file				*new_file(void);
+int					get_files_data(char *directory, t_data **data);
+void				create_parent(t_data **data, char *directory);
+void				save_entry_data(t_data **data, t_file **file_list, struct dirent *dir_entry);
+int					need_children_data(t_data **data, t_file *file);
+int					get_children_data(t_data **data, t_file **child);
+
+/*
+** File requests parsing
+*/
+
+char				*get_file_path(t_file *file);
+int					is_requested_file(t_data **data, t_file *file);
+void				get_requested_files(t_data **data);
+int					file_found_in_current_dir(char *name, t_data **data);
+int					check_other_path(char **name, t_data **data);
+int					get_specific_file(char *path, char *file, t_data **data);
+void				add_specific_file(char *path, char *file, t_data **data, struct dirent *dir_entry);
+
+/*
+** File display functions
+*/
+
 void				print_files(t_data *data);
+void				print_files_recursively(t_data *data, t_file *child);
+
+
+/*
+** File reorder functions
+*/
+
+
+void				reorder_files(t_data **data);
+void				order_alphabetically(t_file **file_list, int descending);
+void				order_children(t_file **file_list, int descending);
+int					compare_file_names(t_file *file_1, t_file *file_2);
+void				swap_with_next(t_file *file);
+void				rewind_file_list(t_file **file_list);
+
+/*
+** Free functions
+*/
+
+void				free_memory(t_data *data);
+void				free_file_list(t_file *file);
+void				free_file_requests(char **file_request);
 
 #endif
