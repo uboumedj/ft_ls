@@ -93,6 +93,8 @@ void		add_specific_file(char *path, char *file, t_data **data,
 	req_file->name = ft_strjoin(!ft_strcmp(path, ".") ? "" : path, file);
 	req_file->type = dir_entry->d_type;
 	req_file->length = dir_entry->d_reclen;
+	req_file->child = NULL;
+	req_file->parent = NULL;
 	req_file->next = (*data)->file_list;
 	if ((*data)->file_list != NULL)
 		(*data)->file_list->prev = req_file;

@@ -48,7 +48,9 @@ int		initialise_file_requests(t_data **data, int length)
 	int i;
 
 	if (!((*data)->file_request = (char **)malloc(sizeof(char *) * length)))
+	{
 		return (FAILURE);
+	}
 	i = 0;
 	while (i < length)
 	{

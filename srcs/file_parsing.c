@@ -25,7 +25,9 @@ int		get_files_data(char *directory, t_data **data)
 	{
 		create_parent(data, directory);
 		while ((next_dir_entry = readdir(dir_stream)) != NULL)
+		{
 			save_entry_data(data, &((*data)->file_list), next_dir_entry);
+		}
 		closedir(dir_stream);
 	}
 	return (result);
@@ -81,7 +83,9 @@ int		get_children_data(t_data **data, t_file **file)
 	else
 	{
 		while ((next_dir_entry = readdir(dir_stream)) != NULL)
+		{
 			save_entry_data(data, file, next_dir_entry);
+		}
 		closedir(dir_stream);
 	}
 	free(directory);

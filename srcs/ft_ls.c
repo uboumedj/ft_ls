@@ -23,13 +23,15 @@ int			main(int argc, char **argv)
 	if (data->file_request)
 	{
 		get_requested_files(&data);
+		reorder_files(&data);
+		print_requested_files(data);
 	}
 	else
 	{
 		get_files_data(".", &data);
+		reorder_files(&data);
+		print_files(data);
 	}
-	reorder_files(&data);
-	print_files(data);
 	free_memory(data);
 	return (0);
 }

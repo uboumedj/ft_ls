@@ -85,10 +85,12 @@ int					get_children_data(t_data **data, t_file **child);
 */
 
 char				*get_file_path(t_file *file);
-int					is_requested_file(t_data **data, t_file *file);
+int					is_requested_file(t_data *data, t_file *file);
 void				get_requested_files(t_data **data);
 int					file_found_in_current_dir(char *name, t_data **data);
 int					check_other_path(char **name, t_data **data);
+int					determine_path_length(t_file *file);
+void				add_dir_to_path(char **path, t_file **dir, int *i);
 int					get_specific_file(char *path, char *file, t_data **data);
 void				add_specific_file(char *path, char *file, t_data **data, struct dirent *dir_entry);
 
@@ -97,8 +99,11 @@ void				add_specific_file(char *path, char *file, t_data **data, struct dirent *
 */
 
 void				print_files(t_data *data);
-void				print_files_recursively(t_data *data, t_file *child);
-
+void				print_files_recursively(t_data *data, t_file *file);
+void				print_requested_files(t_data *data);
+void				print_single_files(t_file *file);
+void				print_directories(t_file *file, t_data *data);
+void				print_direct_children(t_file *file, t_data *data);
 
 /*
 ** File reorder functions
