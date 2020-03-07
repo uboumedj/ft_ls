@@ -41,30 +41,37 @@ int		print_single_files(t_file *file)
 
 void	print_directories(t_file *file, t_data *data, int single_file_presence)
 {
-	t_file *child;
-
 	while (file)
 	{
 		if (file->type == DT_DIR)
 		{
 			if (single_file_presence || file->prev)
+			{
 				ft_putchar('\n');
+			}
 			ft_printf("%s:\n", file->name);
 			print_direct_children(file, data);	
 			if (data->flags->up_r)
 			{
-				child = file->child;
-				while (child)
-				{
-					if ((data->flags->a || (child->name)[0] != '.') &&
-						child->child)
-					{
-						print_files_recursively(data, child);
-					}
-					child = child->next;
-				}
+				print_children_recursively(file, data);
 			}
 		}
 		file = file->next;
+	}
+}
+
+void	print_children_recursively(t_file *file, t_data *data)
+{
+	t_file *child;
+
+	child = file->child;
+	while (child)
+	{
+		if ((data->flags->a || (child->name)[0] != '.') &&
+				child->child)
+		{
+			print_files_recursively(data, child);
+		}
+		child = child->next;
 	}
 }

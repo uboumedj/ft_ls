@@ -79,7 +79,8 @@ void				error_unknown_file(char *name);
 t_file				*new_file(void);
 int					get_files_data(char *directory, t_data **data);
 void				create_parent(t_data **data, char *directory);
-void				save_entry_data(t_data **data, t_file **file_list, struct dirent *dir_entry);
+void				save_entry_data(t_data **data, t_file **file_list,
+													struct dirent *dir_entry);
 int					need_children_data(t_data **data, t_file *file);
 int					get_children_data(t_data **data, t_file **child);
 
@@ -96,7 +97,8 @@ int					check_other_path(char **name, t_data **data);
 int					determine_path_length(t_file *file);
 void				add_dir_to_path(char **path, t_file **dir, int *i);
 int					get_specific_file(char *path, char *file, t_data **data);
-void				add_specific_file(char *path, char *file, t_data **data, struct dirent *dir_entry);
+void				add_specific_file(char *path, char *file, t_data **data,
+													struct dirent *dir_entry);
 
 
 /*
@@ -107,8 +109,10 @@ void				print_files(t_data *data);
 void				print_files_recursively(t_data *data, t_file *file);
 void				print_requested_files(t_data *data);
 int					print_single_files(t_file *file);
-void				print_directories(t_file *file, t_data *data, int single_file_presence);
+void				print_directories(t_file *file, t_data *data,
+													int single_file_presence);
 void				print_direct_children(t_file *file, t_data *data);
+void				print_children_recursively(t_file *file, t_data *data);
 
 
 /*
@@ -118,9 +122,9 @@ void				print_direct_children(t_file *file, t_data *data);
 int					compare_file_names(t_file *file_1, t_file *file_2);
 void				swap_with_next(t_file *file);
 void				rewind_file_list(t_file **file_list);
-void				place_in_order(t_file **file, t_file **list, int descending);
+void				place_in_order(t_file **file, t_file **list, int desc);
 void				insert_file(t_file **before, t_file **file, t_file **after);
-void				insert_beginning(t_file **file, t_file **start, int descending);
+void				insert_beginning(t_file **file, t_file **start, int desc);
 void				insert_end(t_file **file, t_file **end, int descending);
 void				rewind_structure(t_file **file_list);
 
