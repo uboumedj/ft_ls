@@ -37,17 +37,12 @@ void	create_parent(t_data **data, char *directory)
 {
 	t_file	*new;
 
-	rewind_file_list(&(*data)->file_list);
 	new = new_file();
 	new->name = ft_strdup(directory);
 	new->type = DT_DIR;
-	new->next = (*data)->file_list;
 	new->parent = NULL;
 	new->child = NULL;
-	new->prev = NULL;
-	if ((*data)->file_list)
-		(*data)->file_list->prev = new;
-	(*data)->file_list = new;
+	place_in_order(&new, &(*data)->file_list, (*data)->flags->r);
 }
 
 void	save_entry_data(t_data **data, t_file **file_list,
@@ -63,10 +58,7 @@ void	save_entry_data(t_data **data, t_file **file_list,
 	file->parent = *file_list;
 	if (need_children_data(data, file))
 		get_children_data(data, &file);
-	file->next = (*file_list)->child;
-	if ((*file_list)->child != NULL)
-		(*file_list)->child->prev = file;
-	(*file_list)->child = file;
+	place_in_order(&file, &(*file_list)->child, (*data)->flags->r);
 }
 
 int		get_children_data(t_data **data, t_file **file)

@@ -38,7 +38,6 @@ void	print_files(t_data *data)
 		}
 		file = file->next;
 	}
-
 }
 
 void	print_direct_children(t_file *file, t_data *data)

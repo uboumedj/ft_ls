@@ -12,63 +12,79 @@
 
 #include "../inc/ft_ls.h"
 
-void        reorder_files(t_data **data)
+void		place_in_order(t_file **file, t_file **list, int descending)
 {
-	int		descending;
-	t_file	**file_list;
+	t_file	*file_list;
 
-	descending = (*data)->flags->r;
-	file_list = &((*data)->file_list);
-    if ((*data)->flags->t)
-        order_alphabetically(file_list, descending);
-    else
-        order_alphabetically(file_list, descending);
+	file_list = *list;
+	rewind_file_list(&file_list);
+	if (!file_list)
+	{
+		(*file)->next = NULL;
+		(*file)->prev = NULL;
+	}
+	else
+	{
+		while (file_list && file_list->next && 
+				((compare_file_names(*file, file_list) > 0 && !descending) ||
+				(compare_file_names(*file, file_list) < 0 && descending)))
+		{
+			file_list = file_list->next;
+		}
+		if (!file_list->prev)
+			insert_beginning(file, &file_list, descending);
+		else if (!file_list->next)
+			insert_end(file, &file_list, descending);
+		else
+			insert_file(&(file_list->prev), file, &file_list);
+	}
+	*list = *file;
 }
 
-void		order_alphabetically(t_file **file_list, int descending)
+void		insert_beginning(t_file **file, t_file **start, int descending)
 {
-	int			ordered;
-	int			compare;
-	t_file		*file;
-
-	ordered = 1;
-	while (ordered == 1)
+	if ((compare_file_names(*file, *start) > 0 && !descending) ||
+			(compare_file_names(*file, *start) < 0 && descending))
 	{
-		ordered = 0;
-		file = *file_list;
-		if (file)
-		{
-			while (file->next)
-			{
-				compare = compare_file_names(file, file->next);
-				if ((compare > 0 && !descending) || (compare < 0 && descending))
-				{
-					swap_with_next(file);
-					ordered = 1;
-				}
-				else
-					file = file->next;
-			}
-			rewind_file_list(file_list);
-		}
+		(*file)->prev = *start;
+		(*file)->next = (*start)->next;
+		(*start)->next = *file;
+		if ((*file)->next)
+			(*file)->next->prev = *file;
 	}
-	order_children(file_list, descending);
+	else
+	{
+		(*file)->next = *start;
+		(*file)->prev = NULL;
+		(*start)->prev = *file;
+	}
 }
 
-void		order_children(t_file **file_list, int descending)
+void		insert_end(t_file **file, t_file **end, int descending)
 {
-	t_file *file;
-
-	if (*file_list)
+	if ((compare_file_names(*file, *end) > 0 && !descending) ||
+			(compare_file_names(*file, *end) < 0 && descending))
 	{
-		file = *file_list;
-		while (file)
-		{
-			if (file->child)
-			{
-				order_alphabetically(&(file->child), descending);
-			}
-			file = file->next;
-		}
+		(*file)->prev = *end;
+		(*file)->next = NULL;
+		(*end)->next = *file;
 	}
+	else
+	{
+		(*file)->next = *end;
+		(*file)->prev = (*end)->prev;
+		(*end)->prev = *file;
+		if ((*file)->prev)
+			(*file)->prev->next = *file;
+	}
+}
+
+void		insert_file(t_file **before, t_file **file, t_file **after)
+{
+	if (*before)
+		(*before)->next = *file;
+	(*file)->prev = *before;
+	(*file)->next = *after;
+	if (*after)
+		(*after)->prev = *file;
 }

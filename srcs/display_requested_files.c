@@ -23,14 +23,20 @@ void	print_requested_files(t_data *data)
 
 void	print_single_files(t_file *file)
 {
+	int count;
+
+	count = 0;
 	while (file)
 	{
 		if (file->type != DT_DIR)
 		{
 			ft_printf("%s\n", file->name);
+			count = 1;
 		}
 		file = file->next;
 	}
+	if (count)
+		ft_putchar('\n');
 }
 
 void	print_directories(t_file *file, t_data *data)
@@ -41,7 +47,7 @@ void	print_directories(t_file *file, t_data *data)
 	{
 		if (file->type == DT_DIR)
 		{
-			ft_printf("\n%s:\n", file->name);
+			ft_printf("%s:\n", file->name);
 			print_direct_children(file, data);	
 			if (data->flags->up_r)
 			{
@@ -56,6 +62,8 @@ void	print_directories(t_file *file, t_data *data)
 					child = child->next;
 				}
 			}
+			if (file->next)
+				ft_putchar('\n');
 		}
 		file = file->next;
 	}

@@ -109,13 +109,14 @@ void				print_direct_children(t_file *file, t_data *data);
 ** File reorder functions
 */
 
-
-void				reorder_files(t_data **data);
-void				order_alphabetically(t_file **file_list, int descending);
-void				order_children(t_file **file_list, int descending);
 int					compare_file_names(t_file *file_1, t_file *file_2);
 void				swap_with_next(t_file *file);
 void				rewind_file_list(t_file **file_list);
+void				place_in_order(t_file **file, t_file **list, int descending);
+void				insert_file(t_file **before, t_file **file, t_file **after);
+void				insert_beginning(t_file **file, t_file **start, int descending);
+void				insert_end(t_file **file, t_file **end, int descending);
+void				rewind_structure(t_file **file_list);
 
 /*
 ** Free functions

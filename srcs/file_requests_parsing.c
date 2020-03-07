@@ -95,8 +95,5 @@ void		add_specific_file(char *path, char *file, t_data **data,
 	req_file->length = dir_entry->d_reclen;
 	req_file->child = NULL;
 	req_file->parent = NULL;
-	req_file->next = (*data)->file_list;
-	if ((*data)->file_list != NULL)
-		(*data)->file_list->prev = req_file;
-	(*data)->file_list = req_file;
+	place_in_order(&req_file, &(*data)->file_list, (*data)->flags->r);
 }

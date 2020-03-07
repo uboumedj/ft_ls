@@ -38,3 +38,17 @@ int			compare_file_names(t_file *file_1, t_file *file_2)
 	}
 	return (ft_tolower(file_1->name[i]) - ft_tolower(file_2->name[i]));
 }
+
+void		rewind_structure(t_file **file_list)
+{
+	t_file *file;
+
+	rewind_file_list(file_list);
+	file = *file_list;
+	while (file)
+	{
+		if (file->child)
+			rewind_structure(&file->child);
+		file = file->next;
+	}
+}
