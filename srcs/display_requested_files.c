@@ -15,13 +15,14 @@
 void	print_requested_files(t_data *data)
 {
 	t_file			*file;
+	int				single_file_presence;
 
 	file = data->file_list;
-	print_single_files(file);
-	print_directories(file, data);
+	single_file_presence = print_single_files(file);
+	print_directories(file, data, single_file_presence);
 }
 
-void	print_single_files(t_file *file)
+int		print_single_files(t_file *file)
 {
 	int count;
 
@@ -35,11 +36,10 @@ void	print_single_files(t_file *file)
 		}
 		file = file->next;
 	}
-	if (count)
-		ft_putchar('\n');
+	return (count);
 }
 
-void	print_directories(t_file *file, t_data *data)
+void	print_directories(t_file *file, t_data *data, int single_file_presence)
 {
 	t_file *child;
 
@@ -47,6 +47,8 @@ void	print_directories(t_file *file, t_data *data)
 	{
 		if (file->type == DT_DIR)
 		{
+			if (single_file_presence || file->prev)
+				ft_putchar('\n');
 			ft_printf("%s:\n", file->name);
 			print_direct_children(file, data);	
 			if (data->flags->up_r)
@@ -62,8 +64,6 @@ void	print_directories(t_file *file, t_data *data)
 					child = child->next;
 				}
 			}
-			if (file->next)
-				ft_putchar('\n');
 		}
 		file = file->next;
 	}

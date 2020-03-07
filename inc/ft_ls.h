@@ -49,6 +49,7 @@ typedef struct		s_data
 	t_file			*file_list;
 }					t_data;
 
+
 /*
 ** Data structure initialisation
 */
@@ -56,6 +57,7 @@ typedef struct		s_data
 int					initialise_data(t_data **data);
 int     			initialise_flags(t_data **data);
 int					initialise_file_requests(t_data **data, int length);
+
 
 /*
 ** Arguments parsing
@@ -69,6 +71,7 @@ int     			is_valid_flag(char *valid_flags, char c);
 void				error_option(t_data **data, char c);
 void				error_unknown_file(char *name);
 
+
 /*
 ** Current directory parsing (no file request)
 */
@@ -79,6 +82,7 @@ void				create_parent(t_data **data, char *directory);
 void				save_entry_data(t_data **data, t_file **file_list, struct dirent *dir_entry);
 int					need_children_data(t_data **data, t_file *file);
 int					get_children_data(t_data **data, t_file **child);
+
 
 /*
 ** File requests parsing
@@ -94,6 +98,7 @@ void				add_dir_to_path(char **path, t_file **dir, int *i);
 int					get_specific_file(char *path, char *file, t_data **data);
 void				add_specific_file(char *path, char *file, t_data **data, struct dirent *dir_entry);
 
+
 /*
 ** File display functions
 */
@@ -101,9 +106,10 @@ void				add_specific_file(char *path, char *file, t_data **data, struct dirent *
 void				print_files(t_data *data);
 void				print_files_recursively(t_data *data, t_file *file);
 void				print_requested_files(t_data *data);
-void				print_single_files(t_file *file);
-void				print_directories(t_file *file, t_data *data);
+int					print_single_files(t_file *file);
+void				print_directories(t_file *file, t_data *data, int single_file_presence);
 void				print_direct_children(t_file *file, t_data *data);
+
 
 /*
 ** File reorder functions
@@ -117,6 +123,7 @@ void				insert_file(t_file **before, t_file **file, t_file **after);
 void				insert_beginning(t_file **file, t_file **start, int descending);
 void				insert_end(t_file **file, t_file **end, int descending);
 void				rewind_structure(t_file **file_list);
+
 
 /*
 ** Free functions
