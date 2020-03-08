@@ -42,7 +42,7 @@ void	create_parent(t_data **data, char *directory)
 	new->type = DT_DIR;
 	new->parent = NULL;
 	new->child = NULL;
-	place_in_order(&new, &(*data)->file_list, (*data)->flags->r);
+	place_in_order(&new, &(*data)->file_list, *data);
 }
 
 void	save_entry_data(t_data **data, t_file **file_list,
@@ -56,9 +56,13 @@ void	save_entry_data(t_data **data, t_file **file_list,
 	file->length = dir_entry->d_reclen;
 	file->child = NULL;
 	file->parent = *file_list;
+	if ((*data)->flags->t || (*data)->flags->l)
+		get_time(&file, *data);
+	if ((*data)->flags->l)
+		get_more_attributes(&file);
 	if (need_children_data(data, file))
 		get_children_data(data, &file);
-	place_in_order(&file, &(*file_list)->child, (*data)->flags->r);
+	place_in_order(&file, &(*file_list)->child, *data);
 }
 
 int		get_children_data(t_data **data, t_file **file)

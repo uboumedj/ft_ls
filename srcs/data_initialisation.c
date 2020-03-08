@@ -21,7 +21,7 @@ int     initialise_data(t_data **data)
     {
 		error_check = FAILURE;
     }
-	(*data)->valid_flags = "lRart";
+	(*data)->valid_flags = "lRartcu";
 	(*data)->file_list = NULL;
 	(*data)->file_request = NULL;
     if (!(initialise_flags(data)))
@@ -40,6 +40,8 @@ int     initialise_flags(t_data **data)
 	(*data)->flags->a = 0;
 	(*data)->flags->r = 0;
 	(*data)->flags->t = 0;
+	(*data)->flags->c = 0;
+	(*data)->flags->u = 0;
     return (SUCCESS);
 }
 

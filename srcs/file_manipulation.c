@@ -24,6 +24,27 @@ t_file		*new_file(void)
 	return (new);
 }
 
+int			compare_files(t_file *file_1, t_file *file_2, t_data *data)
+{
+	if (data->flags->t || data->flags->c || data->flags->u)
+		return (compare_file_times(file_1, file_2));
+	else
+		return (compare_file_names(file_1, file_2));
+}
+
+int			compare_file_times(t_file *file_1, t_file *file_2)
+{
+	int compare;
+
+	if (!file_1 || !file_2)
+		return (FAILURE);
+	compare = file_2->time - file_1->time;
+	if (compare == 0)
+		return (compare_file_names(file_1, file_2));
+	else
+		return (compare);
+}
+
 int			compare_file_names(t_file *file_1, t_file *file_2)
 {
 	int i;

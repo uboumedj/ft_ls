@@ -79,6 +79,10 @@ int		parse_option(t_data **data, char *arg)
 				(*data)->flags->r = 1;
 			else if (arg[i] == 't')
 				(*data)->flags->t = 1;
+			else if (arg[i] == 'c')
+				(*data)->flags->c = 1;
+			else if (arg[i] == 'u')
+				(*data)->flags->u = 1;
 		}
 		i++;
 	}

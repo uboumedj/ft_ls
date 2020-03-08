@@ -12,7 +12,7 @@
 
 #include "../inc/ft_ls.h"
 
-void		place_in_order(t_file **file, t_file **list, int descending)
+void		place_in_order(t_file **file, t_file **list, t_data *data)
 {
 	t_file	*file_list;
 
@@ -26,25 +26,25 @@ void		place_in_order(t_file **file, t_file **list, int descending)
 	else
 	{
 		while (file_list && file_list->next && 
-				((compare_file_names(*file, file_list) > 0 && !descending) ||
-				(compare_file_names(*file, file_list) < 0 && descending)))
+			((compare_files(*file, file_list, data) > 0 && !(data->flags->r)) ||
+			(compare_files(*file, file_list, data) < 0 && data->flags->r)))
 		{
 			file_list = file_list->next;
 		}
 		if (!file_list->prev)
-			insert_beginning(file, &file_list, descending);
+			insert_beginning(file, &file_list, data);
 		else if (!file_list->next)
-			insert_end(file, &file_list, descending);
+			insert_end(file, &file_list, data);
 		else
 			insert_file(&(file_list->prev), file, &file_list);
 	}
 	*list = *file;
 }
 
-void		insert_beginning(t_file **file, t_file **start, int descending)
+void		insert_beginning(t_file **file, t_file **start, t_data *data)
 {
-	if ((compare_file_names(*file, *start) > 0 && !descending) ||
-			(compare_file_names(*file, *start) < 0 && descending))
+	if ((compare_files(*file, *start, data) > 0 && !(data->flags->r)) ||
+			(compare_files(*file, *start, data) < 0 && data->flags->r))
 	{
 		(*file)->prev = *start;
 		(*file)->next = (*start)->next;
@@ -60,10 +60,10 @@ void		insert_beginning(t_file **file, t_file **start, int descending)
 	}
 }
 
-void		insert_end(t_file **file, t_file **end, int descending)
+void		insert_end(t_file **file, t_file **end, t_data *data)
 {
-	if ((compare_file_names(*file, *end) > 0 && !descending) ||
-			(compare_file_names(*file, *end) < 0 && descending))
+	if ((compare_files(*file, *end, data) > 0 && !(data->flags->r)) ||
+			(compare_files(*file, *end, data) < 0 && data->flags->r))
 	{
 		(*file)->prev = *end;
 		(*file)->next = NULL;

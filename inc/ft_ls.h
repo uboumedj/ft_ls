@@ -16,6 +16,9 @@
 
 # include "../libft/inc/libft.h"
 # include <sys/types.h>
+# include <sys/stat.h>
+# include <unistd.h>
+# include <time.h>
 # include <dirent.h>
 
 # define SUCCESS 1
@@ -28,6 +31,8 @@ typedef struct		s_flags
 	char			a;
 	char			r;
 	char			t;
+	char			c;
+	char			u;
 }					t_flags;
 
 typedef struct		s_file
@@ -35,6 +40,12 @@ typedef struct		s_file
 	char			*name;
 	unsigned char	type;
 	unsigned short	length;
+	time_t			time;
+	off_t			size;
+	blkcnt_t		blocks;
+	uid_t			user;
+	gid_t			group;
+	nlink_t			links;
 	struct s_file	*parent;
 	struct s_file	*child;
 	struct s_file	*prev;
@@ -83,6 +94,8 @@ void				save_entry_data(t_data **data, t_file **file_list,
 													struct dirent *dir_entry);
 int					need_children_data(t_data **data, t_file *file);
 int					get_children_data(t_data **data, t_file **child);
+void				get_time(t_file **file, t_data *data);
+void				get_more_attributes(t_file **file);
 
 
 /*
@@ -119,13 +132,15 @@ void				print_children_recursively(t_file *file, t_data *data);
 ** File reorder functions
 */
 
+int					compare_files(t_file *file_1, t_file *file_2, t_data *data);
 int					compare_file_names(t_file *file_1, t_file *file_2);
+int					compare_file_times(t_file *file_1, t_file *file_2);
 void				swap_with_next(t_file *file);
 void				rewind_file_list(t_file **file_list);
-void				place_in_order(t_file **file, t_file **list, int desc);
+void				place_in_order(t_file **file, t_file **list, t_data *data);
 void				insert_file(t_file **before, t_file **file, t_file **after);
-void				insert_beginning(t_file **file, t_file **start, int desc);
-void				insert_end(t_file **file, t_file **end, int descending);
+void				insert_beginning(t_file **f, t_file **start, t_data *data);
+void				insert_end(t_file **file, t_file **end, t_data *data);
 void				rewind_structure(t_file **file_list);
 
 
