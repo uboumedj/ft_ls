@@ -92,7 +92,6 @@ void		add_specific_file(char *path, char *file, t_data **data,
 	req_file = new_file();
 	req_file->name = ft_strjoin(!ft_strcmp(path, ".") ? "" : path, file);
 	req_file->type = dir_entry->d_type;
-	req_file->length = dir_entry->d_reclen;
 	req_file->child = NULL;
 	req_file->parent = NULL;
 	if ((*data)->flags->t || (*data)->flags->l)

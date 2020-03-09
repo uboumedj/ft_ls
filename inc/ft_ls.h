@@ -39,7 +39,6 @@ typedef struct		s_file
 {
 	char			*name;
 	unsigned char	type;
-	unsigned short	length;
 	time_t			time;
 	off_t			size;
 	blkcnt_t		blocks;
@@ -126,6 +125,11 @@ void				print_directories(t_file *file, t_data *data,
 													int single_file_presence);
 void				print_direct_children(t_file *file, t_data *data);
 void				print_children_recursively(t_file *file, t_data *data);
+void				print_link(t_file *file);
+void				print_total_blocksize(t_file *file, t_data *data);
+void				print_extended_info(t_file *file);
+void				initialise_permissions(t_file *file, char *permissions);
+char				file_type_symbol(t_file *file);
 
 
 /*

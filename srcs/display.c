@@ -23,6 +23,8 @@ void	print_files(t_data *data)
 		{
 			ft_printf("%s:\n", file->name);
 		}
+		if (data->flags->l)
+			print_total_blocksize(file, data);
 		print_direct_children(file, data);
 		if (data->flags->up_r)
 		{
@@ -40,7 +42,14 @@ void	print_direct_children(t_file *file, t_data *data)
 	while (child)
 	{
 		if (data->flags->a || (child->name)[0] != '.')
-			ft_printf("%s\n", child->name);
+		{
+			if (data->flags->l)
+				print_extended_info(child);
+			ft_printf("%s", child->name);
+			if (data->flags->l)
+				print_link(child);
+			ft_putchar('\n');
+		}
 		child = child->next;
 	}
 }
@@ -52,6 +61,8 @@ void	print_files_recursively(t_data *data, t_file *file)
 	file_path = get_file_path(file);
 	ft_printf("\n%s:\n", file_path);
 	free(file_path);
+	if (data->flags->l)
+		print_total_blocksize(file, data);
 	print_direct_children(file, data);
 	print_children_recursively(file, data);
 }

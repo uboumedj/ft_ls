@@ -50,6 +50,8 @@ void	print_directories(t_file *file, t_data *data, int single_file_presence)
 				ft_putchar('\n');
 			}
 			ft_printf("%s:\n", file->name);
+			if (data->flags->l)
+				print_total_blocksize(file, data);
 			print_direct_children(file, data);	
 			if (data->flags->up_r)
 			{

@@ -53,7 +53,6 @@ void	save_entry_data(t_data **data, t_file **file_list,
 	file = new_file();
 	file->name = ft_strdup(dir_entry->d_name);
 	file->type = dir_entry->d_type;
-	file->length = dir_entry->d_reclen;
 	file->child = NULL;
 	file->parent = *file_list;
 	if ((*data)->flags->t || (*data)->flags->l)
