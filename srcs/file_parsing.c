@@ -40,8 +40,6 @@ void	create_parent(t_data **data, char *directory)
 	new = new_file();
 	new->name = ft_strdup(directory);
 	new->type = DT_DIR;
-	new->parent = NULL;
-	new->child = NULL;
 	place_in_order(&new, &(*data)->file_list, *data);
 }
 
@@ -50,30 +48,29 @@ void	save_entry_data(t_data **data, t_file **file_list,
 {
 	t_file	*file;
 
-	file = new_file();
-	file->name = ft_strdup(dir_entry->d_name);
-	file->type = dir_entry->d_type;
-	file->child = NULL;
-	file->parent = *file_list;
-	if ((*data)->flags->t || (*data)->flags->l)
-		get_time(&file, *data);
-	if ((*data)->flags->l)
-		get_more_attributes(&file);
-	if (need_children_data(data, file))
-		get_children_data(data, &file);
-	place_in_order(&file, &(*file_list)->child, *data);
+	if (dir_entry->d_name[0]!= '.' || (*data)->flags->a)
+	{
+		file = new_file();
+		file->name = ft_strdup(dir_entry->d_name);
+		file->type = dir_entry->d_type;
+		file->parent = *file_list;
+		file->full_path = get_file_path(file);
+		if ((*data)->flags->t || (*data)->flags->l)
+			get_more_attributes(&file, *data);
+		if (need_children_data(data, file))
+			get_children_data(data, &file);
+		place_in_order(&file, &(*file_list)->child, *data);
+	}
 }
 
 int		get_children_data(t_data **data, t_file **file)
 {
 	DIR				*dir_stream;
 	struct dirent	*next_dir_entry;
-	char			*directory;
 	int				result;
 
-	directory = get_file_path(*file);
 	result = SUCCESS;
-	if ((dir_stream = opendir(directory)) == NULL)
+	if ((dir_stream = opendir((*file)->full_path)) == NULL)
 		result = FAILURE;
 	else
 	{
@@ -83,6 +80,5 @@ int		get_children_data(t_data **data, t_file **file)
 		}
 		closedir(dir_stream);
 	}
-	free(directory);
 	return (result);
 }

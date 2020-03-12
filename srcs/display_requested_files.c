@@ -18,20 +18,32 @@ void	print_requested_files(t_data *data)
 	int				single_file_presence;
 
 	file = data->file_list;
-	single_file_presence = print_single_files(file);
+	single_file_presence = print_single_files(file, data);
 	print_directories(file, data, single_file_presence);
 }
 
-int		print_single_files(t_file *file)
+int		print_single_files(t_file *file, t_data *data)
 {
-	int count;
+	int		count;
+	short	links_padding;
+	short	size_padding;
 
 	count = 0;
+	if (data->flags->l)
+	{
+		links_padding = compute_single_files_padding(file, "links");
+		size_padding = compute_single_files_padding(file, "size");
+	}
 	while (file)
 	{
 		if (file->type != DT_DIR)
 		{
-			ft_printf("%s\n", file->name);
+			if (data->flags->l)
+				print_extended_info(file, links_padding, size_padding);
+			ft_printf("%s", file->name);
+			if (data->flags->l && file->type == DT_LNK)
+				print_link(file);
+			ft_putchar('\n');
 			count = 1;
 		}
 		file = file->next;

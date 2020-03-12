@@ -62,7 +62,7 @@ int		parse_option(t_data **data, char *arg)
 	i = 1;
 	while (arg[i])
 	{
-		if (!(is_valid_flag((*data)->valid_flags, arg[i])))
+		if (!(is_valid_flag(VALID_FLAGS, arg[i])))
 		{
 			error_option(data, arg[i]);
 			return (FAILURE);

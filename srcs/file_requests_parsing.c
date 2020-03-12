@@ -92,11 +92,8 @@ void		add_specific_file(char *path, char *file, t_data **data,
 	req_file = new_file();
 	req_file->name = ft_strjoin(!ft_strcmp(path, ".") ? "" : path, file);
 	req_file->type = dir_entry->d_type;
-	req_file->child = NULL;
-	req_file->parent = NULL;
+	req_file->full_path = get_file_path(req_file);
 	if ((*data)->flags->t || (*data)->flags->l)
-		get_time(&req_file, *data);
-	if ((*data)->flags->l)
-		get_more_attributes(&req_file);
+		get_more_attributes(&req_file, *data);
 	place_in_order(&req_file, &(*data)->file_list, *data);
 }

@@ -21,7 +21,6 @@ int     initialise_data(t_data **data)
     {
 		error_check = FAILURE;
     }
-	(*data)->valid_flags = "lRartcu";
 	(*data)->file_list = NULL;
 	(*data)->file_request = NULL;
     if (!(initialise_flags(data)))

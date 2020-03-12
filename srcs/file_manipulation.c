@@ -20,13 +20,14 @@ t_file		*new_file(void)
 		return (NULL);
 	new->prev = NULL;
 	new->child = NULL;
+	new->parent = NULL;
 	new->next = NULL;
 	return (new);
 }
 
 int			compare_files(t_file *file_1, t_file *file_2, t_data *data)
 {
-	if (data->flags->t || data->flags->c || data->flags->u)
+	if (data->flags->t)
 		return (compare_file_times(file_1, file_2));
 	else
 		return (compare_file_names(file_1, file_2));

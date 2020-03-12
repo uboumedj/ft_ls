@@ -16,20 +16,17 @@ int		is_requested_file(t_data *data, t_file *file)
 {
 	int		i;
 	int		found;
-	char	*path;
 
 	if (!data->file_request)
 		return (FAILURE);
 	i = 0;
 	found = 0;
-	path = get_file_path(file);
 	while (data->file_request[i])
 	{
-		if (ft_strcmp(data->file_request[i], path) == 0)
+		if (ft_strcmp(data->file_request[i], file->full_path) == 0)
 			found = 1;
 		i++;
 	}
-	free(path);
 	return (found);
 }
 

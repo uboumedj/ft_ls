@@ -36,31 +36,31 @@ void	print_files(t_data *data)
 
 void	print_direct_children(t_file *file, t_data *data)
 {
-	t_file *child;
+	t_file	*child;
+	short	links_padding;
+	short	size_padding;
 
 	child = file->child;
+	if (data->flags->l)
+	{
+		links_padding = compute_padding(file, "links");
+		size_padding = compute_padding(file, "size");
+	}
 	while (child)
 	{
-		if (data->flags->a || (child->name)[0] != '.')
-		{
-			if (data->flags->l)
-				print_extended_info(child);
-			ft_printf("%s", child->name);
-			if (data->flags->l)
-				print_link(child);
-			ft_putchar('\n');
-		}
+		if (data->flags->l)
+			print_extended_info(child, links_padding, size_padding);
+		ft_printf("%s", child->name);
+		if (data->flags->l && child->type == DT_LNK)
+			print_link(child);
+		ft_putchar('\n');
 		child = child->next;
 	}
 }
 
 void	print_files_recursively(t_data *data, t_file *file)
 {
-	char			*file_path;
-
-	file_path = get_file_path(file);
-	ft_printf("\n%s:\n", file_path);
-	free(file_path);
+	ft_printf("\n%s:\n", file->full_path);
 	if (data->flags->l)
 		print_total_blocksize(file, data);
 	print_direct_children(file, data);

@@ -20,9 +20,12 @@
 # include <unistd.h>
 # include <time.h>
 # include <dirent.h>
+# include <pwd.h>
+# include <grp.h>
 
 # define SUCCESS 1
 # define FAILURE 0
+# define VALID_FLAGS "lRartcu"
 
 typedef struct		s_flags
 {
@@ -39,12 +42,14 @@ typedef struct		s_file
 {
 	char			*name;
 	unsigned char	type;
+	char			*full_path;
 	time_t			time;
 	off_t			size;
 	blkcnt_t		blocks;
 	uid_t			user;
 	gid_t			group;
 	nlink_t			links;
+	mode_t			permissions;
 	struct s_file	*parent;
 	struct s_file	*child;
 	struct s_file	*prev;
@@ -55,7 +60,6 @@ typedef struct		s_data
 {
 	t_flags			*flags;
 	char			**file_request;
-	char			*valid_flags;
 	t_file			*file_list;
 }					t_data;
 
@@ -93,8 +97,7 @@ void				save_entry_data(t_data **data, t_file **file_list,
 													struct dirent *dir_entry);
 int					need_children_data(t_data **data, t_file *file);
 int					get_children_data(t_data **data, t_file **child);
-void				get_time(t_file **file, t_data *data);
-void				get_more_attributes(t_file **file);
+void				get_more_attributes(t_file **file, t_data *data);
 
 
 /*
@@ -120,16 +123,21 @@ void				add_specific_file(char *path, char *file, t_data **data,
 void				print_files(t_data *data);
 void				print_files_recursively(t_data *data, t_file *file);
 void				print_requested_files(t_data *data);
-int					print_single_files(t_file *file);
+int					print_single_files(t_file *file, t_data *data);
 void				print_directories(t_file *file, t_data *data,
 													int single_file_presence);
 void				print_direct_children(t_file *file, t_data *data);
 void				print_children_recursively(t_file *file, t_data *data);
 void				print_link(t_file *file);
 void				print_total_blocksize(t_file *file, t_data *data);
-void				print_extended_info(t_file *file);
+void				print_extended_info(t_file *file, short links_padding, short size_padding);
 void				initialise_permissions(t_file *file, char *permissions);
 char				file_type_symbol(t_file *file);
+short				number_length(int number);
+short				compute_padding(t_file *dir, char *datatype);
+short				compute_single_files_padding(t_file *file, char *datatype);
+void				format_date(t_file *file, char *date);
+void				print_id_as_string(int id);
 
 
 /*

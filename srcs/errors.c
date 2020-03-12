@@ -19,7 +19,7 @@ void	error_option(t_data **data, char c)
 	free(*data);
 	ft_putstr_fd("./ft_ls: invalid option -- ", 2);
 	ft_putchar_fd(c, 2);
-	ft_putstr_fd("\nusage: ./ft_ls [-Ralrt] [file ...]\n", 2);
+	ft_putstr_fd("\nusage: ./ft_ls [-Ralrtuc] [file ...]\n", 2);
 }
 
 void	error_unknown_file(char *name)

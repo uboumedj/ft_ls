@@ -30,6 +30,7 @@ void		free_file_list(t_file *file)
 		next = file->next;
 		free_file_list(file->child);
 		free(file->name);
+		free(file->full_path);
 		free(file);
 		file = next;
 	}

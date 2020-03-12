@@ -15,16 +15,10 @@
 void	print_link(t_file *file)
 {
 	char buffer[255];
-	char *path;
 
-	if (file->type == DT_LNK)
-	{
-		ft_bzero(buffer, 255);
-		path = get_file_path(file);
-		readlink(path, buffer, 255);
-		free(path);
-		ft_printf(" -> %s", buffer);
-	}
+	ft_bzero(buffer, 255);
+	readlink(file->full_path, buffer, 255);
+	ft_printf(" -> %s", buffer);
 }
 
 void	print_total_blocksize(t_file *file, t_data *data)
@@ -45,44 +39,60 @@ void	print_total_blocksize(t_file *file, t_data *data)
 	ft_printf("total %d\n", result / 2);
 }
 
-void	print_extended_info(t_file *file)
+void	print_extended_info(t_file *file, short links_padding, short size_padding)
 {
-	char permissions[11];
+	char			permissions[11];
+	struct passwd	*user;
+	struct group	*group;
+	char 			date[13];
 
 	initialise_permissions(file, permissions);
-	ft_printf("%s %ld %ld ", permissions, file->links, file->size);
+	ft_putstr(permissions);
+	ft_printf(" %*ld ", links_padding, file->links);
+	user = getpwuid(file->user);
+	if (!user || !user->pw_name)
+		print_id_as_string((int)file->user);
+	else
+		ft_putstr(user->pw_name);
+	ft_putchar(' ');
+	group = getgrgid(file->group);
+	if (!group || !group->gr_name)
+		print_id_as_string((int)file->group);
+	else
+		ft_putstr(group->gr_name);
+	format_date(file, date);
+	ft_printf(" %*ld %s ", size_padding, file->size, date);
+}
+
+void	print_id_as_string(int id)
+{
+	char *str;
+
+	str = ft_itoa(id);
+	ft_putstr(str);
+	free(str);
 }
 
 void	initialise_permissions(t_file *file, char *permissions)
 {
-	int i;
-
-	i = 1;
 	permissions[0] = file_type_symbol(file);
-	while (i < 10)
-	{
-		permissions[i] = '-';
-		i++;
-	}
-	permissions[i] = '\0';
-}
-
-char	file_type_symbol(t_file *file)
-{
-	if (file->type == DT_DIR)
-		return ('d');
-	else if (file->type == DT_LNK)
-		return ('l');
-	else if (file->type == DT_FIFO)
-		return ('p');
-	else if (file->type == DT_BLK)
-		return ('b');
-	else if (file->type == DT_CHR)
-		return ('c');
-	else if (file->type == DT_SOCK)
-		return ('s');
-	else if (file->type == DT_UNKNOWN)
-		return ('?');
+	permissions[1] = (file->permissions & S_IRUSR) ? 'r' : '-';
+	permissions[2] = (file->permissions & S_IWUSR) ? 'w' : '-';
+	if (file->permissions & S_ISUID)
+		permissions[3] = (file->permissions & S_IXUSR) ? 's' : 'S';
 	else
-		return ('-');
+		permissions[3] = (file->permissions & S_IXUSR) ? 'x' : '-';
+	permissions[4] = (file->permissions & S_IRGRP) ? 'r' : '-';
+	permissions[5] = (file->permissions & S_IWGRP) ? 'w' : '-';
+	if (file->permissions & S_ISGID)
+		permissions[6] = (file->permissions & S_IXGRP) ? 's' : 'S';
+	else
+		permissions[6] = (file->permissions & S_IXGRP) ? 'x' : '-';
+	permissions[7] = (file->permissions & S_IROTH) ? 'r' : '-';
+	permissions[8] = (file->permissions & S_IWOTH) ? 'w' : '-';
+	if (file->permissions & S_ISVTX)
+		permissions[9] = (file->permissions & S_IXOTH) ? 't' : 'T';
+	else
+		permissions[9] = (file->permissions & S_IXOTH) ? 'x' : '-';
+	permissions[10] = '\0';
 }
