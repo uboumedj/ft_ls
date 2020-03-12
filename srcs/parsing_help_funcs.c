@@ -37,7 +37,7 @@ int		need_children_data(t_data **data, t_file *file)
 	need = 0;
 	if (file->type == DT_DIR &&
 			(is_requested_file(*data, file) ||
-			((*data)->flags->up_r &&
+			(((*data)->flags & UP_R_FLAG) &&
 			ft_strcmp(file->name, "..") != 0 &&
 			ft_strcmp(file->name, ".") != 0)))
 	{

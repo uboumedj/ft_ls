@@ -29,7 +29,7 @@ int		print_single_files(t_file *file, t_data *data)
 	short	size_padding;
 
 	count = 0;
-	if (data->flags->l)
+	if (data->flags & L_FLAG)
 	{
 		links_padding = compute_single_files_padding(file, "links");
 		size_padding = compute_single_files_padding(file, "size");
@@ -38,10 +38,10 @@ int		print_single_files(t_file *file, t_data *data)
 	{
 		if (file->type != DT_DIR)
 		{
-			if (data->flags->l)
+			if (data->flags & L_FLAG)
 				print_extended_info(file, links_padding, size_padding);
 			ft_printf("%s", file->name);
-			if (data->flags->l && file->type == DT_LNK)
+			if ((data->flags & L_FLAG) && file->type == DT_LNK)
 				print_link(file);
 			ft_putchar('\n');
 			count = 1;
@@ -62,10 +62,10 @@ void	print_directories(t_file *file, t_data *data, int single_file_presence)
 				ft_putchar('\n');
 			}
 			ft_printf("%s:\n", file->name);
-			if (data->flags->l)
-				print_total_blocksize(file, data);
+			if (data->flags & L_FLAG)
+				print_total_blocksize(file);
 			print_direct_children(file, data);	
-			if (data->flags->up_r)
+			if (data->flags & UP_R_FLAG)
 			{
 				print_children_recursively(file, data);
 			}
@@ -81,7 +81,7 @@ void	print_children_recursively(t_file *file, t_data *data)
 	child = file->child;
 	while (child)
 	{
-		if ((data->flags->a || (child->name)[0] != '.') &&
+		if (((data->flags & A_FLAG) || (child->name)[0] != '.') &&
 				child->child)
 		{
 			print_files_recursively(data, child);

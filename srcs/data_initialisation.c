@@ -23,25 +23,8 @@ int     initialise_data(t_data **data)
     }
 	(*data)->file_list = NULL;
 	(*data)->file_request = NULL;
-    if (!(initialise_flags(data)))
-    {
-        error_check = FAILURE;
-    }
+    (*data)->flags = 0;
 	return (error_check);
-}
-
-int     initialise_flags(t_data **data)
-{
-	if (!((*data)->flags = (t_flags *)malloc(sizeof(t_flags))))
-		return (FAILURE);
-	(*data)->flags->l = 0;
-	(*data)->flags->up_r = 0;
-	(*data)->flags->a = 0;
-	(*data)->flags->r = 0;
-	(*data)->flags->t = 0;
-	(*data)->flags->c = 0;
-	(*data)->flags->u = 0;
-    return (SUCCESS);
 }
 
 int		initialise_file_requests(t_data **data, int length)

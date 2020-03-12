@@ -26,17 +26,13 @@
 # define SUCCESS 1
 # define FAILURE 0
 # define VALID_FLAGS "lRartcu"
-
-typedef struct		s_flags
-{
-	char			l;
-	char			up_r;
-	char			a;
-	char			r;
-	char			t;
-	char			c;
-	char			u;
-}					t_flags;
+# define UP_R_FLAG 00000001
+# define L_FLAG 00000010
+# define T_FLAG 00000100
+# define U_FLAG 00001000
+# define LOW_R_FLAG 00010000
+# define A_FLAG 00100000
+# define C_FLAG 01000000
 
 typedef struct		s_file
 {
@@ -58,7 +54,7 @@ typedef struct		s_file
 
 typedef struct		s_data
 {
-	t_flags			*flags;
+	int				flags;
 	char			**file_request;
 	t_file			*file_list;
 }					t_data;
@@ -69,7 +65,6 @@ typedef struct		s_data
 */
 
 int					initialise_data(t_data **data);
-int     			initialise_flags(t_data **data);
 int					initialise_file_requests(t_data **data, int length);
 
 
@@ -82,6 +77,7 @@ int					save_file_request(t_data **data, int argc, char *arg);
 int					read_argument(t_data **data, char *arg);
 int					parse_option(t_data **data, char *arg);
 int     			is_valid_flag(char *valid_flags, char c);
+void				save_flag(t_data **data, char flag);
 void				error_option(t_data **data, char c);
 void				error_unknown_file(char *name);
 
@@ -129,7 +125,7 @@ void				print_directories(t_file *file, t_data *data,
 void				print_direct_children(t_file *file, t_data *data);
 void				print_children_recursively(t_file *file, t_data *data);
 void				print_link(t_file *file);
-void				print_total_blocksize(t_file *file, t_data *data);
+void				print_total_blocksize(t_file *file);
 void				print_extended_info(t_file *file, short links_padding, short size_padding);
 void				initialise_permissions(t_file *file, char *permissions);
 char				file_type_symbol(t_file *file);

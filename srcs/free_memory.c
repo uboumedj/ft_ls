@@ -17,7 +17,6 @@ void		free_memory(t_data *data)
 	free_file_list(data->file_list);
 	if (data->file_request)
 		free_file_requests(data->file_request);
-	free(data->flags);
 	free(data);
 }
 

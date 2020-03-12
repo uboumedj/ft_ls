@@ -27,7 +27,7 @@ t_file		*new_file(void)
 
 int			compare_files(t_file *file_1, t_file *file_2, t_data *data)
 {
-	if (data->flags->t)
+	if (data->flags & T_FLAG)
 		return (compare_file_times(file_1, file_2));
 	else
 		return (compare_file_names(file_1, file_2));

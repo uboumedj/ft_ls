@@ -17,13 +17,13 @@ void		get_more_attributes(t_file **file, t_data *data)
 	struct stat	buffer;
 
 	lstat((*file)->full_path, &buffer);
-	if (data->flags->c)
+	if (data->flags & C_FLAG)
 		(*file)->time = buffer.st_ctime;
-	else if (data->flags->u)
+	else if (data->flags & U_FLAG)
 		(*file)->time = buffer.st_atime;
 	else
 		(*file)->time = buffer.st_mtime;
-	if (data->flags->l)
+	if (data->flags & L_FLAG)
 	{
 		(*file)->size = buffer.st_size;
 		(*file)->blocks = buffer.st_blocks;

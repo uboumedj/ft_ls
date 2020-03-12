@@ -69,20 +69,7 @@ int		parse_option(t_data **data, char *arg)
 		}
 		else
 		{
-			if (arg[i] == 'R')
-				(*data)->flags->up_r = 1;
-			else if (arg[i] == 'a')
-				(*data)->flags->a = 1;
-			else if (arg[i] == 'l')
-				(*data)->flags->l = 1;
-			else if (arg[i] == 'r')
-				(*data)->flags->r = 1;
-			else if (arg[i] == 't')
-				(*data)->flags->t = 1;
-			else if (arg[i] == 'c')
-				(*data)->flags->c = 1;
-			else if (arg[i] == 'u')
-				(*data)->flags->u = 1;
+			save_flag(data, arg[i]);
 		}
 		i++;
 	}
@@ -101,4 +88,22 @@ int     is_valid_flag(char *valid_flags, char c)
 		i++;
 	}
 	return (FAILURE);
+}
+
+void	save_flag(t_data **data, char flag)
+{
+	if (flag == 'R')
+		(*data)->flags |= UP_R_FLAG;
+	else if (flag == 'a')
+		(*data)->flags |= A_FLAG;
+	else if (flag == 'l')
+		(*data)->flags |= L_FLAG;
+	else if (flag == 'r')
+		(*data)->flags |= LOW_R_FLAG;
+	else if (flag == 't')
+		(*data)->flags |= T_FLAG;
+	else if (flag == 'c')
+		(*data)->flags |= C_FLAG;
+	else if (flag == 'u')
+		(*data)->flags |= U_FLAG;
 }

@@ -19,14 +19,14 @@ void	print_files(t_data *data)
 	file = data->file_list;
 	while (file)
 	{
-		if (data->flags->up_r && ft_strcmp(file->name, ".") != 0)
+		if ((data->flags & UP_R_FLAG) && ft_strcmp(file->name, ".") != 0)
 		{
 			ft_printf("%s:\n", file->name);
 		}
-		if (data->flags->l)
-			print_total_blocksize(file, data);
+		if (data->flags & L_FLAG)
+			print_total_blocksize(file);
 		print_direct_children(file, data);
-		if (data->flags->up_r)
+		if (data->flags & UP_R_FLAG)
 		{
 			print_children_recursively(file, data);
 		}
@@ -41,17 +41,17 @@ void	print_direct_children(t_file *file, t_data *data)
 	short	size_padding;
 
 	child = file->child;
-	if (data->flags->l)
+	if (data->flags & L_FLAG)
 	{
 		links_padding = compute_padding(file, "links");
 		size_padding = compute_padding(file, "size");
 	}
 	while (child)
 	{
-		if (data->flags->l)
+		if (data->flags & L_FLAG)
 			print_extended_info(child, links_padding, size_padding);
 		ft_printf("%s", child->name);
-		if (data->flags->l && child->type == DT_LNK)
+		if (data->flags & L_FLAG && child->type == DT_LNK)
 			print_link(child);
 		ft_putchar('\n');
 		child = child->next;
@@ -61,8 +61,8 @@ void	print_direct_children(t_file *file, t_data *data)
 void	print_files_recursively(t_data *data, t_file *file)
 {
 	ft_printf("\n%s:\n", file->full_path);
-	if (data->flags->l)
-		print_total_blocksize(file, data);
+	if (data->flags & L_FLAG)
+		print_total_blocksize(file);
 	print_direct_children(file, data);
 	print_children_recursively(file, data);
 }

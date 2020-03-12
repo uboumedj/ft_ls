@@ -21,7 +21,7 @@ void	print_link(t_file *file)
 	ft_printf(" -> %s", buffer);
 }
 
-void	print_total_blocksize(t_file *file, t_data *data)
+void	print_total_blocksize(t_file *file)
 {
 	int		result;
 	t_file	*child;
@@ -30,10 +30,7 @@ void	print_total_blocksize(t_file *file, t_data *data)
 	child = file->child;
 	while (child)
 	{
-		if (data->flags->a || child->name[0] != '.')
-		{
-			result += child->blocks;
-		}
+		result += child->blocks;
 		child = child->next;
 	}
 	ft_printf("total %d\n", result / 2);

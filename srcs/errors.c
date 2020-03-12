@@ -15,7 +15,6 @@
 void	error_option(t_data **data, char c)
 {
 	free_file_requests((*data)->file_request);
-	free((*data)->flags);
 	free(*data);
 	ft_putstr_fd("./ft_ls: invalid option -- ", 2);
 	ft_putchar_fd(c, 2);

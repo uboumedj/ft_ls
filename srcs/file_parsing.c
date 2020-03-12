@@ -48,14 +48,14 @@ void	save_entry_data(t_data **data, t_file **file_list,
 {
 	t_file	*file;
 
-	if (dir_entry->d_name[0]!= '.' || (*data)->flags->a)
+	if (dir_entry->d_name[0]!= '.' || ((*data)->flags & A_FLAG))
 	{
 		file = new_file();
 		file->name = ft_strdup(dir_entry->d_name);
 		file->type = dir_entry->d_type;
 		file->parent = *file_list;
 		file->full_path = get_file_path(file);
-		if ((*data)->flags->t || (*data)->flags->l)
+		if (((*data)->flags & T_FLAG) || ((*data)->flags & L_FLAG))
 			get_more_attributes(&file, *data);
 		if (need_children_data(data, file))
 			get_children_data(data, &file);

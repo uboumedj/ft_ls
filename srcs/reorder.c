@@ -26,8 +26,10 @@ void		place_in_order(t_file **file, t_file **list, t_data *data)
 	else
 	{
 		while (file_list && file_list->next && 
-			((compare_files(*file, file_list, data) > 0 && !(data->flags->r)) ||
-			(compare_files(*file, file_list, data) < 0 && data->flags->r)))
+			((compare_files(*file, file_list, data) > 0 &&
+												!(data->flags & LOW_R_FLAG)) ||
+			(compare_files(*file, file_list, data) < 0 &&
+												(data->flags & LOW_R_FLAG))))
 		{
 			file_list = file_list->next;
 		}
@@ -43,8 +45,10 @@ void		place_in_order(t_file **file, t_file **list, t_data *data)
 
 void		insert_beginning(t_file **file, t_file **start, t_data *data)
 {
-	if ((compare_files(*file, *start, data) > 0 && !(data->flags->r)) ||
-			(compare_files(*file, *start, data) < 0 && data->flags->r))
+	if ((compare_files(*file, *start, data) > 0 &&
+												!(data->flags & LOW_R_FLAG)) ||
+			(compare_files(*file, *start, data) < 0 &&
+												(data->flags & LOW_R_FLAG)))
 	{
 		(*file)->prev = *start;
 		(*file)->next = (*start)->next;
@@ -62,8 +66,8 @@ void		insert_beginning(t_file **file, t_file **start, t_data *data)
 
 void		insert_end(t_file **file, t_file **end, t_data *data)
 {
-	if ((compare_files(*file, *end, data) > 0 && !(data->flags->r)) ||
-			(compare_files(*file, *end, data) < 0 && data->flags->r))
+	if ((compare_files(*file, *end, data) > 0 && !(data->flags & LOW_R_FLAG)) ||
+			(compare_files(*file, *end, data) < 0 && (data->flags & LOW_R_FLAG)))
 	{
 		(*file)->prev = *end;
 		(*file)->next = NULL;
