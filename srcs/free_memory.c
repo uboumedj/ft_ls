@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_memory.c           		                     :+:      :+:    :+:  */
+/*   free_memory.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,22 +14,27 @@
 
 void		free_memory(t_data *data)
 {
-	free_file_list(data->file_list);
+	free_file_list(data->file_list, data->flags);
 	if (data->file_request)
 		free_file_requests(data->file_request);
 	free(data);
 }
 
-void		free_file_list(t_file *file)
+void		free_file_list(t_file *file, int flags)
 {
 	t_file *next;
 
 	while (file)
 	{
 		next = file->next;
-		free_file_list(file->child);
+		free_file_list(file->child, flags);
 		free(file->name);
 		free(file->full_path);
+		if (flags & L_FLAG)
+		{
+			free(file->user);
+			free(file->group);
+		}
 		free(file);
 		file = next;
 	}

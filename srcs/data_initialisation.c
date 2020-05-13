@@ -12,24 +12,24 @@
 
 #include "../inc/ft_ls.h"
 
-int     initialise_data(t_data **data)
+int		initialise_data(t_data **data)
 {
-    int     error_check;
+	int	error_check;
 
-    error_check = SUCCESS;
+	error_check = SUCCESS;
 	if (!((*data) = (t_data *)malloc(sizeof(t_data))))
-    {
+	{
 		error_check = FAILURE;
-    }
+	}
 	(*data)->file_list = NULL;
 	(*data)->file_request = NULL;
-    (*data)->flags = 0;
+	(*data)->flags = 0;
 	return (error_check);
 }
 
 int		initialise_file_requests(t_data **data, int length)
 {
-	int i;
+	int	i;
 
 	if (!((*data)->file_request = (char **)malloc(sizeof(char *) * length)))
 	{

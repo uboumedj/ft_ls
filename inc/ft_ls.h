@@ -17,9 +17,11 @@
 # include "../libft/inc/libft.h"
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <errno.h>
 # include <unistd.h>
 # include <time.h>
 # include <dirent.h>
+# include <sys/sysmacros.h>
 # include <pwd.h>
 # include <grp.h>
 
@@ -42,10 +44,12 @@ typedef struct		s_file
 	time_t			time;
 	off_t			size;
 	blkcnt_t		blocks;
-	uid_t			user;
-	gid_t			group;
+	char			*user;
+	char			*group;
 	nlink_t			links;
 	mode_t			permissions;
+	dev_t			dev;
+	char			error;
 	struct s_file	*parent;
 	struct s_file	*child;
 	struct s_file	*prev;
@@ -59,14 +63,12 @@ typedef struct		s_data
 	t_file			*file_list;
 }					t_data;
 
-
 /*
 ** Data structure initialisation
 */
 
 int					initialise_data(t_data **data);
 int					initialise_file_requests(t_data **data, int length);
-
 
 /*
 ** Arguments parsing
@@ -76,11 +78,10 @@ int					parse_arguments(t_data **data, int argc, char **argv);
 int					save_file_request(t_data **data, int argc, char *arg);
 int					read_argument(t_data **data, char *arg);
 int					parse_option(t_data **data, char *arg);
-int     			is_valid_flag(char *valid_flags, char c);
+int					is_valid_flag(char *valid_flags, char c);
 void				save_flag(t_data **data, char flag);
 void				error_option(t_data **data, char c);
 void				error_unknown_file(char *name);
-
 
 /*
 ** Current directory parsing (no file request)
@@ -94,7 +95,9 @@ void				save_entry_data(t_data **data, t_file **file_list,
 int					need_children_data(t_data **data, t_file *file);
 int					get_children_data(t_data **data, t_file **child);
 void				get_more_attributes(t_file **file, t_data *data);
-
+char				*get_group_name(gid_t id);
+char				*get_user_name(uid_t id);
+void				create_error(t_data **data, char *directory);
 
 /*
 ** File requests parsing
@@ -111,7 +114,6 @@ int					get_specific_file(char *path, char *file, t_data **data);
 void				add_specific_file(char *path, char *file, t_data **data,
 													struct dirent *dir_entry);
 
-
 /*
 ** File display functions
 */
@@ -126,15 +128,15 @@ void				print_direct_children(t_file *file, t_data *data);
 void				print_children_recursively(t_file *file, t_data *data);
 void				print_link(t_file *file);
 void				print_total_blocksize(t_file *file);
-void				print_extended_info(t_file *file, short links_padding, short size_padding);
+void				print_extended_info(t_file *file, short *padding);
 void				initialise_permissions(t_file *file, char *permissions);
 char				file_type_symbol(t_file *file);
-short				number_length(int number);
-short				compute_padding(t_file *dir, char *datatype);
-short				compute_single_files_padding(t_file *file, char *datatype);
+short				num_length(int number);
+short				*compute_padding(t_file *dir);
+short				*compute_single_files_padding(t_file *file);
 void				format_date(t_file *file, char *date);
 void				print_id_as_string(int id);
-
+void				error_permissions(char *name);
 
 /*
 ** File reorder functions
@@ -151,13 +153,12 @@ void				insert_beginning(t_file **f, t_file **start, t_data *data);
 void				insert_end(t_file **file, t_file **end, t_data *data);
 void				rewind_structure(t_file **file_list);
 
-
 /*
 ** Free functions
 */
 
 void				free_memory(t_data *data);
-void				free_file_list(t_file *file);
+void				free_file_list(t_file *file, int flags);
 void				free_file_requests(char **file_request);
 
 #endif

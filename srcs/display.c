@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c         			                        :+:      :+:    :+:   */
+/*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -37,32 +37,35 @@ void	print_files(t_data *data)
 void	print_direct_children(t_file *file, t_data *data)
 {
 	t_file	*child;
-	short	links_padding;
-	short	size_padding;
+	short	*padding;
 
 	child = file->child;
 	if (data->flags & L_FLAG)
-	{
-		links_padding = compute_padding(file, "links");
-		size_padding = compute_padding(file, "size");
-	}
+		padding = compute_padding(file);
 	while (child)
 	{
 		if (data->flags & L_FLAG)
-			print_extended_info(child, links_padding, size_padding);
+			print_extended_info(child, padding);
 		ft_printf("%s", child->name);
 		if (data->flags & L_FLAG && child->type == DT_LNK)
 			print_link(child);
 		ft_putchar('\n');
 		child = child->next;
 	}
+	if (data->flags & L_FLAG)
+		free(padding);
 }
 
 void	print_files_recursively(t_data *data, t_file *file)
 {
-	ft_printf("\n%s:\n", file->full_path);
-	if (data->flags & L_FLAG)
-		print_total_blocksize(file);
-	print_direct_children(file, data);
-	print_children_recursively(file, data);
+	if (file->error == -1)
+		error_permissions(file->name);
+	else
+	{
+		ft_printf("\n%s:\n", file->full_path);
+		if (data->flags & L_FLAG)
+			print_total_blocksize(file);
+		print_direct_children(file, data);
+		print_children_recursively(file, data);
+	}
 }

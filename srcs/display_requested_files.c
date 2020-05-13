@@ -25,21 +25,17 @@ void	print_requested_files(t_data *data)
 int		print_single_files(t_file *file, t_data *data)
 {
 	int		count;
-	short	links_padding;
-	short	size_padding;
+	short	*padding;
 
 	count = 0;
 	if (data->flags & L_FLAG)
-	{
-		links_padding = compute_single_files_padding(file, "links");
-		size_padding = compute_single_files_padding(file, "size");
-	}
+		padding = compute_single_files_padding(file);
 	while (file)
 	{
 		if (file->type != DT_DIR)
 		{
 			if (data->flags & L_FLAG)
-				print_extended_info(file, links_padding, size_padding);
+				print_extended_info(file, padding);
 			ft_printf("%s", file->name);
 			if ((data->flags & L_FLAG) && file->type == DT_LNK)
 				print_link(file);
@@ -48,6 +44,8 @@ int		print_single_files(t_file *file, t_data *data)
 		}
 		file = file->next;
 	}
+	if (data->flags & L_FLAG)
+		free(padding);
 	return (count);
 }
 
@@ -61,13 +59,18 @@ void	print_directories(t_file *file, t_data *data, int single_file_presence)
 			{
 				ft_putchar('\n');
 			}
-			ft_printf("%s:\n", file->name);
-			if (data->flags & L_FLAG)
-				print_total_blocksize(file);
-			print_direct_children(file, data);	
-			if (data->flags & UP_R_FLAG)
+			if (file->error == -1)
+				error_permissions(file->full_path);
+			else
 			{
-				print_children_recursively(file, data);
+				ft_printf("%s:\n", file->name);
+				if (data->flags & L_FLAG)
+					print_total_blocksize(file);
+				print_direct_children(file, data);
+				if (data->flags & UP_R_FLAG)
+				{
+					print_children_recursively(file, data);
+				}
 			}
 		}
 		file = file->next;
@@ -82,7 +85,7 @@ void	print_children_recursively(t_file *file, t_data *data)
 	while (child)
 	{
 		if (((data->flags & A_FLAG) || (child->name)[0] != '.') &&
-				child->child)
+				child->type == DT_DIR)
 		{
 			print_files_recursively(data, child);
 		}

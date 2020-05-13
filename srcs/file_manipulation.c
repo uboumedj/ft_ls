@@ -18,6 +18,7 @@ t_file		*new_file(void)
 
 	if (!(new = (t_file *)malloc(sizeof(t_file))))
 		return (NULL);
+	new->error = 0;
 	new->prev = NULL;
 	new->child = NULL;
 	new->parent = NULL;

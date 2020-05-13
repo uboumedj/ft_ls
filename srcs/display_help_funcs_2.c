@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display_help_funcs_2.c        		                :+:      :+:    :+:   */
+/*   display_help_funcs_2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -32,52 +32,60 @@ char	file_type_symbol(t_file *file)
 		return ('-');
 }
 
-short	compute_padding(t_file *dir, char *datatype)
+short	*compute_padding(t_file *dir)
 {
 	t_file	*child;
-	short	padding;
-	short	length;
+	short	*padding;
 
 	child = dir->child;
-	padding = 0;
+	padding = (short *)ft_memalloc(6 * sizeof(short));
 	while (child)
 	{
-		if (ft_strcmp(datatype, "links") == 0)
-			length = number_length(child->links);
-		else if (ft_strcmp(datatype, "size") == 0)
-			length = number_length(child->size);
-		if (length > padding)
-			padding = length;
+		padding[0] = ft_max(num_length(child->links), padding[0]);
+		padding[1] = ft_max(ft_strlen(child->user), padding[1]);
+		padding[2] = ft_max(ft_strlen(child->group), padding[2]);
+		padding[3] = ft_max(num_length(child->size), padding[3]);
+		if (child->type == DT_CHR || child->type == DT_BLK)
+		{
+			padding[4] = ft_max(num_length(major(child->dev)), padding[4]);
+			padding[5] = ft_max(num_length(minor(child->dev)), padding[5]);
+		}
 		child = child->next;
 	}
+	if (padding[4] && padding[5])
+		padding[3] = ft_max((padding[4] + padding[5] + 2), padding[3]);
 	return (padding);
 }
 
-short	compute_single_files_padding(t_file *file, char *datatype)
+short	*compute_single_files_padding(t_file *file)
 {
-	short	padding;
-	short	length;
 	t_file	*parser;
+	short	*padding;
 
 	parser = file;
-	padding = 0;
+	padding = (short *)ft_memalloc(6 * sizeof(short));
 	while (parser)
 	{
 		if (parser->type != DT_DIR)
 		{
-			if (ft_strcmp(datatype, "links") == 0)
-				length = number_length(parser->links);
-			else if (ft_strcmp(datatype, "size") == 0)
-				length = number_length(parser->size);
-			if (length > padding)
-				padding = length;
+			padding[0] = ft_max(num_length(parser->links), padding[0]);
+			padding[1] = ft_max(ft_strlen(parser->user), padding[1]);
+			padding[2] = ft_max(ft_strlen(parser->group), padding[2]);
+			padding[3] = ft_max(num_length(parser->size), padding[3]);
+			if (parser->type == DT_CHR || parser->type == DT_BLK)
+			{
+				padding[4] = ft_max(num_length(major(parser->dev)), padding[4]);
+				padding[5] = ft_max(num_length(minor(parser->dev)), padding[5]);
+			}
 		}
 		parser = parser->next;
 	}
+	if (padding[4] && padding[5])
+		padding[3] = ft_max((padding[4] + padding[5] + 2), padding[3]);
 	return (padding);
 }
 
-short	number_length(int number)
+short	num_length(int number)
 {
 	short result;
 
@@ -96,7 +104,7 @@ void	format_date(t_file *file, char *date)
 	char	*raw_date;
 	time_t	curr_time;
 	int		i;
-	int 	j;
+	int		j;
 
 	raw_date = ctime(&file->time);
 	i = 0;

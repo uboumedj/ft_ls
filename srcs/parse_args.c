@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_args.c                         			     :+:      :+:    :+:  */
+/*   parse_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,7 +14,7 @@
 
 int		parse_arguments(t_data **data, int argc, char **argv)
 {
-	int		i;
+	int	i;
 
 	if (argc > 1)
 	{
@@ -76,7 +76,7 @@ int		parse_option(t_data **data, char *arg)
 	return (SUCCESS);
 }
 
-int     is_valid_flag(char *valid_flags, char c)
+int		is_valid_flag(char *valid_flags, char c)
 {
 	int i;
 

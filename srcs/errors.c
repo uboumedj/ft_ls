@@ -27,3 +27,10 @@ void	error_unknown_file(char *name)
 	ft_putstr_fd(name, 2);
 	ft_putstr_fd("': No such file or directory\n", 2);
 }
+
+void	error_permissions(char *name)
+{
+	ft_putstr_fd("./ft_ls: cannot open directory '", 2);
+	ft_putstr_fd(name, 2);
+	ft_putstr_fd("': Permission denied\n", 2);
+}

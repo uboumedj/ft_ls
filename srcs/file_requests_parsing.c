@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_requests_parsing.c               	           :+:      :+:    :+:    */
+/*   file_requests_parsing.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -76,7 +76,7 @@ int			get_specific_file(char *path, char *file, t_data **data)
 			{
 				add_specific_file(path, file, data, next_dir_entry);
 				result = SUCCESS;
-				break;
+				break ;
 			}
 		}
 		closedir(dir_stream);

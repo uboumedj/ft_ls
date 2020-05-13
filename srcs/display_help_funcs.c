@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display_help_funcs.c          		                :+:      :+:    :+:   */
+/*   display_help_funcs.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uboumedj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -36,38 +36,22 @@ void	print_total_blocksize(t_file *file)
 	ft_printf("total %d\n", result / 2);
 }
 
-void	print_extended_info(t_file *file, short links_padding, short size_padding)
+void	print_extended_info(t_file *file, short *padding)
 {
 	char			permissions[11];
-	struct passwd	*user;
-	struct group	*group;
-	char 			date[13];
+	char			date[13];
 
 	initialise_permissions(file, permissions);
 	ft_putstr(permissions);
-	ft_printf(" %*ld ", links_padding, file->links);
-	user = getpwuid(file->user);
-	if (!user || !user->pw_name)
-		print_id_as_string((int)file->user);
-	else
-		ft_putstr(user->pw_name);
-	ft_putchar(' ');
-	group = getgrgid(file->group);
-	if (!group || !group->gr_name)
-		print_id_as_string((int)file->group);
-	else
-		ft_putstr(group->gr_name);
+	ft_printf(" %*ld %-*s %-*s ", padding[0], file->links, padding[1],
+					file->user, padding[2], file->group);
 	format_date(file, date);
-	ft_printf(" %*ld %s ", size_padding, file->size, date);
-}
-
-void	print_id_as_string(int id)
-{
-	char *str;
-
-	str = ft_itoa(id);
-	ft_putstr(str);
-	free(str);
+	if (file->type == DT_BLK || file->type == DT_CHR)
+		ft_printf(" %*ld, %*ld", padding[4], major(file->dev),
+												padding[5], minor(file->dev));
+	else
+		ft_printf(" %*ld", padding[3], file->size);
+	ft_printf(" %s ", date);
 }
 
 void	initialise_permissions(t_file *file, char *permissions)

@@ -14,7 +14,7 @@ NAME = ft_ls
 
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined
 
 LIBFT = libft
 
